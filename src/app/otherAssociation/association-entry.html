@@ -1,0 +1,9 @@
+<p-growl [value]="msgs"></p-growl>
+<h1> Other Association Name</h1>
+
+<input #input type="text" size="20" pInputText [(ngModel)]="association.name" style="width:250px;" autofocus/>
+<br><br>
+
+<button pButton type="button" icon="fa fa-check" iconPos="right" label="Save" (click)="SaveData()"></button>
+<button pButton type="button" icon="fa fa-times" iconPos="right" label="Delete" class="ui-button-danger" (click)="DeleteData()" [disabled]="cityInput === null"></button>
+<button pButton type="button" icon="fa fa-hand-o-right" iconPos="right" label="Cancel" class="ui-button-secondary" (click)="goBack()"></button>

@@ -1,0 +1,26 @@
+/* You can add global styles to this file, and also import other style files */
+.myheader{
+    margin-top: 0px;
+}
+
+.ui-datatable thead tr{
+    height: 35px;
+}
+
+tr{
+    height: 35px;
+}
+
+.searchbox{
+    display: inline-block;
+    border: 0 none;
+    font-size: 14px;
+    background: transparent;
+    border-bottom: 2px solid #0388e5;
+    outline: 0 none;
+    color: black;
+    width: 100px;
+    padding: 1px 20px 1px 1px;
+    margin: 0px;
+    border-radius: 2px;
+}

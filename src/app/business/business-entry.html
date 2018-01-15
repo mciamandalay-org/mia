@@ -1,0 +1,494 @@
+<p-growl [(value)]="msgs"></p-growl>
+<div class="ui-g ui-fluid">
+    <div class="ui-g-12">
+        <div *ngIf="editMode">
+            <div class="ui-g">
+                <div class="ui-sm-8 ui-md-8 ui-lg-8" style="text-align: left;">
+                    <h3 class="myheader">Business Form</h3>
+                </div>
+
+                <div class="ui-sm-4 ui-md-4 ui-lg-4" style="text-align: right;">
+                    <button pButton type="button" tooltipPosition="top" Tooltip="Save" (click)="SaveData()" icon="fa-save" iconPos="right" class="ui-button-primary"
+                        style="width:35px;"></button>
+                    <button pButton type="button" tooltipPosition="top" Tooltip="Close" (click)="changeViewMode()" icon="fa fa-hand-o-right"
+                        iconPos="right" class="ui-button-secondary" style="width:35px;"></button>
+                </div>
+
+            </div>
+            <div class="ui-panelgrid ui-widget ui-panelgrid-blank" style="border:0px !important; background:none;">
+                <div class="ui-panelgrid-content ui-grid ui-grid-responsive">
+
+                    <div class="ui-g-12 ui-md-12 ui-lg-6">
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-4">
+                                Name
+                            </div>
+                            <div class="ui-grid-col-8">
+                                <input #input pInputText type="text" [(ngModel)]="business.name" />
+                            </div>
+                        </div>
+                        <br />
+                        <div class="ui-grid-row">
+
+                            <div class="ui-grid-col-4">
+                                Business Type
+                            </div>
+                            <div class="ui-grid-col-8">
+
+                                <p-dropdown [options]="businessArray" [style]="{'width':'100%'}" [(ngModel)]="business.businessTypeId" filter="filter" (onChange)="onChangeBusiness($event)">
+                                    <ng-template let-businessData pTemplate="item">
+                                        <span *ngIf="businessData.label !== '-Select a  Business-' && businessData.label !== 'Add New Business'">
+                                            <button pButton type="button" icon="fa fa-pencil" style="width:30px;" iconPos="right" class="ui-button-secondary" (click)="showBusinessDialog(businessData)"></button>
+                                        </span>
+                                        <span>{{businessData.label}}</span>
+                                    </ng-template>
+                                </p-dropdown>
+
+                            </div>
+                        </div>
+                        <br />
+
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-4">
+                                Address
+                            </div>
+                            <div class="ui-grid-col-8">
+                                <input pInputText type="text" [(ngModel)]="business.address" />
+                            </div>
+                        </div>
+                        <br />
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-4">
+                                City
+                            </div>
+
+
+                            <div class="ui-grid-col-8">
+                                <p-dropdown [options]="Cities" [style]="{'width':'100%'}" [(ngModel)]="business.cityId" filter="filter" (onChange)="onChangeCity($event)">
+                                    <ng-template let-city pTemplate="item">
+                                        <span *ngIf="city.label !== '- Select a city -' && city.label !== 'Add New City'">
+                                            <button pButton type="button" icon="fa fa-pencil" style="width:30px;" iconPos="right" class="ui-button-secondary" (click)="showCityDialog(city)"></button>
+                                        </span>
+                                        <span>{{city.label}}</span>
+                                    </ng-template>
+                                </p-dropdown>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-4">
+                                Township
+                            </div>
+                            <div class="ui-grid-col-8">
+                                <p-dropdown [options]="townships" [style]="{'width':'100%'}" [(ngModel)]="business.townshipId" filter="filter" (onChange)="onChangeTownship($event)">
+                                    <ng-template pTemplate="item" let-town>
+                                        <span *ngIf="town.label !== '- Select a township -' && town.label !== 'Add New Township'">
+                                            <button pButton type="button" style="width:30px;" icon="fa fa-pencil" iconPos="right" class="ui-button-secondary" (click)="showTownshipDialog(town)"></button>
+                                        </span>
+                                        <span>{{town.label}}</span>
+                                    </ng-template>
+                                </p-dropdown>
+                            </div>
+                        </div>
+                        <br />
+
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-4">
+                                Founded Date
+                            </div>
+                            <div class="ui-grid-col-8">
+                                <p-calendar [(ngModel)]="business.foundedDate" [monthNavigator]="true" [yearNavigator]="true" dateFormat="dd/mm/yy"></p-calendar>
+                            </div>
+                        </div>
+                        <br />
+
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-4">
+                                License Number
+                            </div>
+                            <div class="ui-grid-col-8">
+                                <input pInputText type="text" [(ngModel)]="business.licenseNumber" />
+                            </div>
+                        </div>
+                        <br />
+                        01/11/2017
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-4">
+                                Other License
+                            </div>
+                            <div class="ui-grid-col-8">
+                                <input pInputText type="text" [(ngModel)]="business.otherLicense" />
+                            </div>
+                        </div>
+                        <br />
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-4">
+                                Type Of OwnerShip
+                            </div>
+                            <div class="ui-grid-col-8">
+                                <input pInputText type="text" [(ngModel)]="business.typeOfOwnership" />
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+                    <div class="ui-g-12 ui-md-12 ui-lg-6">
+
+
+
+
+
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-4">
+                                Number of Employee
+                            </div>
+                            <div class="ui-grid-col-8">
+                                <input pInputText type="text" [(ngModel)]="business.numberOfEmployee" />
+                            </div>
+                        </div>
+                        <br />
+
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-4">
+                                Website
+                            </div>
+                            <div class="ui-grid-col-8">
+                                <input pInputText type="text" [(ngModel)]="business.website" />
+                            </div>
+                        </div>
+                        <br />
+
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-4">
+                                Email
+                            </div>
+                            <div class="ui-grid-col-8">
+                                <input pInputText type="text" [(ngModel)]="business.email" />
+                            </div>
+                        </div>
+                        <br />
+
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-4">
+                                Fax
+                            </div>
+                            <div class="ui-grid-col-8">
+                                <input pInputText type="text" [(ngModel)]="business.fax" />
+                            </div>
+                        </div>
+                        <br />
+
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-4">
+                                Industry Type
+                            </div>
+                            <div class="ui-grid-col-8">
+                                <!-- <input pInputText type="text" [(ngModel)]="business.industryType.name" /> -->
+                                <p-dropdown [options]="industryTypeArray" [style]="{'width':'100%'}" [(ngModel)]="business.industryTypeId" filter="filter"
+                                    (onChange)="onChangeIndustry($event)">
+                                    <ng-template let-industry pTemplate="item">
+                                        <span *ngIf="industry.label !== '-Select a  Industry-' && industry.label !== 'Add New Industry'">
+                                            <button pButton type="button" icon="fa fa-pencil" style="width:30px;" iconPos="right" class="ui-button-secondary" (click)="showIndustryDialog(industry)"></button>
+                                        </span>
+                                        <span>{{industry.label}}</span>
+                                    </ng-template>
+                                </p-dropdown>
+                            </div>
+                        </div>
+                        <br />
+
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-4">
+                                Capital
+                            </div>
+                            <div class="ui-grid-col-8">
+                                <input pInputText type="text" [(ngModel)]="business.capital" />
+                            </div>
+                        </div>
+                        <br />
+
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-4">
+                                Annual Income
+                            </div>
+                            <div class="ui-grid-col-8">
+                                <input pInputText type="text" [(ngModel)]="business.annualIncome" />
+                            </div>
+                        </div>
+                        <br/>
+
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-4">
+                                Business Branch
+                            </div>
+                            <div class="ui-grid-col-8">
+                                <!-- <input pInputText type="text" [(ngModel)]="business.businessBranch.name" /> -->
+                            </div>
+                        </div>
+                        <br/>
+
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-4">
+                                Business Facility
+                            </div>
+                            <div class="ui-grid-col-8">
+                                <!-- <input pInputText type="text" [(ngModel)]="business.businessFacility.name" /> -->
+                                <p-listbox [options]="facilityData" [(ngModel)]="this.selectedFacilities" (onChange)="onChangeFacility($event)" multiple="multiple" checkbox="checkbox" filter="filter">
+                                    <p-header>
+                                        <i class="fa fa-trash"></i>
+                                        Facility
+                                    </p-header>
+                                    <!-- <ng-template let-dataItem="item">
+                                        {{dataItem.name}}
+                                    </ng-template> -->
+                                </p-listbox>
+                            
+                            </div>
+                        </div>
+                        <br/>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="!editMode">
+            <div class="ui-g">
+                <div class="ui-sm-8 ui-md-8 ui-lg-8" style="text-align: left;">
+                    <h3 class="myheader">Business Form</h3>
+                </div>
+
+                <div class="ui-sm-4 ui-md-4 ui-lg-4" style="text-align: right;">
+                    <button pButton type="button" tooltipPosition="top" Tooltip="Edit Your Form" (click)="EditClick()" icon="fa-edit" iconPos="right"
+                        class="ui-button-primary" style="width:35px;"></button>
+
+                    <button pButton type="button" tooltipPosition="top" Tooltip="Close" (click)="closeBusinessForm()" icon="fa fa-window-close"
+                        iconPos="right" class="ui-button-secondary" style="width:35px;"></button>
+                </div>
+
+            </div>
+            <div class="ui-panelgrid ui-widget ui-panelgrid-blank" style="border:0px !important; background:none;">
+                <div class="ui-panelgrid-content ui-grid ui-grid-responsive">
+
+                    <div class="ui-g-12 ui-md-12 ui-lg-6">
+
+                        <div class="ui-grid-row" *ngIf="defaultBusiness.name !== business.name">
+                            <div class="ui-grid-col-5">
+                                Name:
+                            </div>
+                            <div class="ui-grid-col-7">
+                                {{business.name}}
+                            </div>
+                            <br />
+                        </div>
+                        <div class="ui-grid-row" *ngIf="defaultBusiness.businessType!== business.businessType">
+                                <div class="ui-grid-col-5">
+                                    Business Type:
+                                </div>
+                                <div class="ui-grid-col-7">
+                                    {{business.businessType.name}}
+                                </div>
+                                <br />
+                            </div>
+
+
+
+                        <div class="ui-grid-row" *ngIf="defaultBusiness.address!== business.address">
+                            <div class="ui-grid-col-5">
+                                Address:
+                            </div>
+                            <div class="ui-grid-col-7">
+                                {{business.address}}
+                            </div>
+                            <br />
+                        </div>
+
+                        <div class="ui-grid-row" *ngIf="defaultBusiness.city!== business.city">
+                            <div class="ui-grid-col-5">
+                                City:
+                            </div>
+                            <div class="ui-grid-col-7">
+                                {{business.city.name}}
+                            </div>
+                            <br />
+                        </div>
+
+                        <div class="ui-grid-row" *ngIf="defaultBusiness.township!== business.township">
+                            <div class="ui-grid-col-5">
+                                Township :
+                            </div>
+                            <div class="ui-grid-col-7">
+                                {{business.township.name}}
+                            </div>
+                            <br />
+                        </div>
+
+                        <div class="ui-grid-row" *ngIf="defaultBusiness.foundedDate!== business.foundedDate">
+                            <div class="ui-grid-col-5">
+                                Founded Date:
+                            </div>
+                            <div class="ui-grid-col-7">
+                                {{business.foundedDate | date:'shortDate'}}
+                            </div>
+                            <br />
+                        </div>
+
+                        <div class="ui-grid-row" *ngIf="defaultBusiness.licenseNumber!== business.licenseNumber">
+                            <div class="ui-grid-col-5">
+                                License Number:
+                            </div>
+                            <div class="ui-grid-col-7">
+                                {{ business.licenseNumber}}
+                            </div>
+                            <br />
+                        </div>
+
+                        <div class="ui-grid-row" *ngIf="defaultBusiness.otherLicense!== business.otherLicense">
+                            <div class="ui-grid-col-5">
+                                Other License :
+                            </div>
+                            <div class="ui-grid-col-7">
+                                {{business.otherLicense}}
+                            </div>
+                            <br />
+                        </div>
+                        <div class="ui-grid-row" *ngIf="defaultBusiness.typeOfOwnership!== business.typeOfOwnership">
+                            <div class="ui-grid-col-5">
+                                Type Of Ownership:
+                            </div>
+                            <div class="ui-grid-col-7">
+                                {{business.typeOfOwnership}}
+                            </div>
+                            <br />
+                        </div>
+                        <div class="ui-grid-row" *ngIf="defaultBusiness.numberOfEmployee!== business.numberOfEmployee">
+                            <div class="ui-grid-col-5">
+                                number Of Employee:
+                            </div>
+                            <div class="ui-grid-col-7">
+                                {{business.numberOfEmployee}}
+                            </div>
+                            <br />
+                        </div>
+
+                    </div>
+                    <div class="ui-g-12 ui-md-12 ui-lg-6">
+
+                        <div class="ui-grid-row" *ngIf="defaultBusiness.website!== business.website">
+                            <div class="ui-grid-col-5">
+                                Website:
+                            </div>
+                            <div class="ui-grid-col-7">
+                                {{business.website}}
+                            </div>
+                        </div>
+                        <div class="ui-grid-row" *ngIf="defaultBusiness.email!== business.email">
+                            <div class="ui-grid-col-5">
+                                Email :
+                            </div>
+                            <div class="ui-grid-col-7">
+
+                                {{business.email}}
+                            </div>
+                            <br />
+                        </div>
+
+
+
+                        <div class="ui-grid-row" *ngIf="defaultBusiness.fax!== business.fax">
+                            <div class="ui-grid-col-5">
+                                Fax :
+                            </div>
+                            <div class="ui-grid-col-7">
+                                {{business.fax}}
+                            </div>
+                            <br />
+                        </div>
+                        <div class="ui-grid-row" *ngIf="defaultBusiness.industryType!== business.industryType">
+                            <div class="ui-grid-col-5">
+                                Industry Type:
+                            </div>
+                            <div class="ui-grid-col-7">
+                                {{business.industryType.name}}
+                            </div>
+                            <br />
+                        </div>
+                        <div class="ui-grid-row" *ngIf="defaultBusiness.capital!== business.capital">
+                            <div class="ui-grid-col-5">
+                                Capital
+                            </div>
+                            <div class="ui-grid-col-7">
+
+                                {{business.capital}}
+                            </div>
+                            <br />
+                        </div>
+
+                        <div class="ui-grid-row" *ngIf="defaultBusiness.annualIncome!== business.annualIncome">
+                            <div class="ui-grid-col-5">
+                                Annual Income :
+                            </div>
+                            <div class="ui-grid-col-7">
+                                {{business.annualIncome}}
+                            </div>
+                            <br />
+                        </div>
+
+                        <div class="ui-grid-row" *ngIf="defaultBusiness.businessBranch!== business. businessBranch">
+                            <div class="ui-grid-col-5">
+                                business Branch :
+                            </div>
+                            <div class="ui-grid-col-7">
+                                {{business.businessBranch}}
+                            </div>
+                            <br />
+                        </div>
+                        <div class="ui-grid-row" *ngIf="defaultBusiness.businessFacility!== business.businessFacility">
+                            <div class="ui-grid-col-5">
+                                business Facility:
+                            </div>
+                            <div class="ui-grid-col-7">
+                                {{facilitiesStringForViewMode}}
+                            </div>
+                            <br />
+                        </div>
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <bs-modal #CityModal [size]="'sm'">
+            <bs-modal-body>
+                <city-entry *ngIf="this.city !== undefined" [cityInput]="this.city" [cityEmitDialog]="true" (cityOutput)="CityDialogResult($event)"></city-entry>
+            </bs-modal-body>
+        </bs-modal>
+
+        <bs-modal #TownshipModal [size]="'sm'">
+            <bs-modal-body>
+                <township-entry *ngIf="this.town !== undefined" [townshipInput]="this.town" [townshipEmitDialog]="true" (townshipOutput)="townshipDialogResult($event)"></township-entry>
+            </bs-modal-body>
+        </bs-modal>
+
+        <bs-modal #BusinessModal [size]="'sm'">
+            <bs-modal-body>
+                <businesstype-entry *ngIf="this.businessObj!== undefined" [businessinput]="this.businessObj" [businessInputDialog]="true"
+                    (businessOutput)="businessDialogResult($event)"></businesstype-entry>
+            </bs-modal-body>
+        </bs-modal>
+
+        <bs-modal #IndustryModal [size]="'sm'">
+            <bs-modal-body>
+                <industrytype-entry *ngIf="this.industryObj!== undefined" [industryinput]="this.industryObj" [industryInputDialog]="true"
+                    (industryOutput)="industryDialogResult($event)"></industrytype-entry>
+            </bs-modal-body>
+        </bs-modal>
+
+
+    </div>
+</div>

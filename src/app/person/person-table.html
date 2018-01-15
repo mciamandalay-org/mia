@@ -1,0 +1,54 @@
+<p-growl [(value)]="msgs"></p-growl>
+
+<p-dataTable [globalFilter]="gb" [value]="personlist" selectionMode="multiple" [(selection)]="selectedPersons" [rows]="25" [paginator]="true"
+  [responsive]="true" [pageLinks]="3" scrollable="true" [style]="{'margin-top':'30px'}" [rowsPerPageOptions]="[25,50,75,100]"
+  (onRowClick)="onRowClick($event)" [headerCheckboxToggleAllPages]="true"
+  dataKey="personId">
+  <p-header>
+
+    <div style="height:32px;">
+      <button type="button" (click)="NewPerson()" pButton label="New Person" class="ui-button-primary" style="width:130px;height:30px;float:left;"
+        icon="fa-plus-square" iconPos="left"></button>
+
+      <button type="button" (click)="showConfirmDialog()" pButton label="Delete Selected Rows" class="ui-button-danger" style="height:30px;float:left;"
+        [disabled]="selectedPersons.length==0" icon="fa fa-times" iconPos="left"></button>
+        <input #gb class="searchbox" type="text" placeholder="Search" style="width:150px; float:right;" />
+    </div>
+
+  </p-header>
+  <p-column [style]="{'width':'38px'}" selectionMode="multiple"></p-column>
+  <p-column field="name" header="Name" [sortable]="true" [style]="{'width':'200px'}"></p-column>
+  <p-column field="homeAddress" header="Address" [sortable]="true"></p-column>
+  <p-column field="homeCity" header="City" [sortable]="true">
+    <ng-template pTemplate="body" let-dataItem="rowData">
+      <span *ngIf="dataItem.homeCity !== null">{{dataItem.homeCity.name}}</span>
+    </ng-template>
+  </p-column>
+  <p-column field="mobilePhone" header="Mobile" [sortable]="true"></p-column>
+  <p-column field="phone" header="Phone" [sortable]="true"></p-column>
+</p-dataTable>
+
+<bs-modal #personModal [size]="'lg'" (onDismiss)="onDismissModal()">
+  <bs-modal-body>
+    <person-entry *ngIf="this.personObj !== undefined" (dialogEvent)="returnDialogResult($event)" [editMode]="editMode" [person]="this.personObj"></person-entry>
+  </bs-modal-body>
+</bs-modal>
+
+<bs-modal #confirmModal [size]="'sm'">
+  <bs-modal-header [showDismiss]="true">
+    Confirm Dialog
+  </bs-modal-header>
+  <bs-modal-body>
+    <div>Are you sure to delete ?</div>
+  </bs-modal-body>
+  <bs-modal-footer>
+      <div class="ui-grid-row">
+        <div class="ui-grid-col-6" style="padding: 5px;">
+          <button class="btn btn-primary" (click)="deleteSelectedRows()" style="width: 100%;">Yes</button>
+        </div>
+        <div class="ui-grid-col-6" style="padding: 5px;">
+          <button class="btn btn-default" (click)="confirmModal.close()" style="width: 100%;">No</button>
+        </div>
+      </div>
+  </bs-modal-footer>
+</bs-modal>

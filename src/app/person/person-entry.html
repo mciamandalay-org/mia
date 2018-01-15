@@ -1,0 +1,499 @@
+<p-growl [(value)]="msgs"></p-growl>
+<div class="ui-g ui-fluid">
+    <div class="ui-g-12">
+        <div *ngIf="editMode">
+            <div class="ui-g">
+                <div class="ui-sm-8 ui-md-8 ui-lg-8" style="text-align: left;">
+                    <h3 class="myheader">Person Form</h3>
+                </div>
+
+                <div class="ui-sm-4 ui-md-4 ui-lg-4" style="text-align: right;">
+                    <button pButton type="button" tooltipPosition="top" Tooltip="Save" (click)="SaveData()" icon="fa-save" iconPos="right" class="ui-button-primary"
+                        style="width:35px;"></button>
+                    <button pButton type="button" tooltipPosition="top" Tooltip="Close" (click)="changeViewMode()" icon="fa fa-hand-o-right"
+                        iconPos="right" class="ui-button-secondary" style="width:35px;"></button>
+                </div>
+
+            </div>
+            <div class="ui-panelgrid ui-widget ui-panelgrid-blank" style="border:0px !important; background:none;">
+                <div class="ui-panelgrid-content ui-grid ui-grid-responsive">
+
+                    <div class="ui-g-12 ui-md-12 ui-lg-6">
+                        <div class="ui-grid-row">
+
+                            <div class="ui-grid-col-4">
+                                Name
+                            </div>
+                            <div class="ui-grid-col-8">
+                                <input #input pInputText type="text" [(ngModel)]="person.name"/>
+                            </div>
+                        </div>
+                        <br />
+
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-4">
+                                Father Name
+                            </div>
+                            <div class="ui-grid-col-8">
+                                <input pInputText type="text" [(ngModel)]="person.fatherName" />
+                            </div>
+                        </div>
+                        <br />
+
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-4">
+                                Mother Name
+                            </div>
+                            <div class="ui-grid-col-8">
+                                <input pInputText type="text" [(ngModel)]="person.motherName" />
+                            </div>
+                        </div>
+                        <br />
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-4">
+                                NRC:
+                            </div>
+                            <div class="ui-grid-col-8">
+                                <input pInputText type="text" [(ngModel)]="person.nrc" />
+                            </div>
+                        </div>
+                        <br />
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-4">
+                                Date of Bitrh
+                            </div>
+                            <div class="ui-grid-col-8">
+                                <p-calendar [(ngModel)]="person.dateOfBirth" dateFormat="dd/mm/yy"></p-calendar>
+                            </div>
+                        </div>
+                        <br />
+
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-4">
+                                Race
+                            </div>
+                            <div class="ui-grid-col-8">
+                                <p-autoComplete [(ngModel)]="person.race" [suggestions]="filteredRaces" (completeMethod)="filterRaces($event)" [size]="30"
+                                [minLength]="1"></p-autoComplete>
+
+                            </div>
+                        </div>
+                        <br />
+
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-4">
+                                Nationality
+                            </div>
+                            <div class="ui-grid-col-8">
+                                <p-autoComplete [(ngModel)]="person.nationality" [suggestions]="filteredNations" (completeMethod)="filterNations($event)" [size]="30"
+                                [minLength]="1"></p-autoComplete>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-4">
+                                Religion:
+                            </div>
+                            <div class="ui-grid-col-8">
+                                <p-autoComplete [(ngModel)]="person.religion" [suggestions]="filteredReligions" (completeMethod)="filterReligions($event)" [size]="30"
+                                [minLength]="1"></p-autoComplete>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-4">
+                                Gender:
+                            </div>
+                            <div class="ui-grid-col-8">
+                                <p-radioButton [(ngModel)]="person.gender" name="groupname" value="1" label="Male"></p-radioButton>
+                                <p-radioButton [(ngModel)]="person.gender" name="groupname" value="0" label="Female"></p-radioButton>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-4">
+                                Home Address:
+                            </div>
+                            <div class="ui-grid-col-8">
+                                <input pInputText type="text" [(ngModel)]="person.homeAddress" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui-g-12 ui-md-12 ui-lg-6">
+
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-4">
+                                Home City
+                            </div>
+                            <div class="ui-grid-col-8">
+                                <p-dropdown [options]="homeCities" [style]="{'width':'100%'}" [(ngModel)]="person.homeCityId" filter="filter" (onChange)="onChangeHomeCity($event)">
+                                    <ng-template let-city pTemplate="item">
+                                        <span *ngIf="city.label !== '- Select a city -' && city.label !== 'Add New City'">
+                                            <button pButton type="button" icon="fa fa-pencil" style="width:30px;" iconPos="right" class="ui-button-secondary" (click)="showHomeCityDialog(city)"></button>
+                                        </span>
+                                        <span>{{city.label}}</span>
+                                    </ng-template>
+                                </p-dropdown>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-4">
+                                Home Township
+                            </div>
+                            <div class="ui-grid-col-8">
+                                <p-dropdown [options]="townships" [style]="{'width':'100%'}" [(ngModel)]="person.homeTownshipId" filter="filter" (onChange)="onChangeTownship($event)">
+                                    <ng-template pTemplate="item" let-town>
+                                        <span *ngIf="town.label !== '- Select a township -' && town.label !== 'Add New Township'">
+                                            <button pButton type="button" style="width:30px;" icon="fa fa-pencil" iconPos="right" class="ui-button-secondary" (click)="showHomeTownshipDialog(town)"></button>
+                                        </span>
+                                        <span>{{town.label}}</span>
+                                    </ng-template>
+                                </p-dropdown>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-4">
+                                Mobile Phone
+                            </div>
+                            <div class="ui-grid-col-8">
+                                <input pInputText type="text" [(ngModel)]="person.mobilePhone" />
+                            </div>
+                        </div>
+                        <br />
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-4">
+                                Phone:
+                            </div>
+                            <div class="ui-grid-col-8">
+                                <input pInputText type="text" [(ngModel)]="person.phone" />
+                            </div>
+                        </div>
+                        <br />
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-4">
+                                Email
+                            </div>
+                            <div class="ui-grid-col-8">
+
+                                <input pInputText type="text" [(ngModel)]="person.email" />
+                            </div>
+                        </div>
+                        <br />
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-4">
+                                Education
+                            </div>
+                            <div class="ui-grid-col-8">
+                                <input pInputText type="text" [(ngModel)]="person.education" />
+                            </div>
+                        </div>
+                        <br />
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-4">
+                                Professional
+                            </div>
+                            <div class="ui-grid-col-8">
+                                <input pInputText type="text" [(ngModel)]="person.professional" />
+                            </div>
+                        </div>
+                        <br />
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-4">
+                                Biography:
+                            </div>
+                            <div class="ui-grid-col-8">
+                                <input pInputText type="text" [(ngModel)]="person.biography" />
+                            </div>
+                        </div>
+                        <br />
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-4">
+                                Native City
+                            </div>
+                            <div class="ui-grid-col-8">
+                                <p-dropdown [options]="nativeCities" [style]="{'width':'100%'}" [(ngModel)]="person.nativeCityId" filter="filter" (onChange)="onChangeNativeCity($event)">
+                                    <ng-template pTemplate="item" let-native>
+                                        <span *ngIf="native.label !== '- Select a city -' && native.label !== 'Add New City'">
+
+                                            <button pButton type="button" icon="fa fa-pencil" style="width:30px;" iconPos="right" class="ui-button-secondary" (click)="showNativeCityDialog(native)"></button>
+
+                                        </span>
+                                        <span>{{native.label}}</span>
+                                    </ng-template>
+                                </p-dropdown>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-4">
+                                Remark:
+                            </div>
+                            <div class="ui-grid-col-8">
+                                <input pInputText type="text" [(ngModel)]="person.remark" />
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-4">
+                                Photo
+                            </div>
+                            <div class="ui-grid-col-8">
+                                <img [src]="person.photo" style="width: 200px; height: 200px; background-color: lightgray;text-align: center; padding: 17px; margin-bottom: 5px;"/>
+
+                                <input type="file" (change)="uploadPhoto($event)" style="margin-bottom: 5px;">
+                                <button (click)="removePhoto()" style="width: 200px;">Remove</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="!editMode">
+            <div class="ui-g">
+                <div class="ui-sm-8 ui-md-8 ui-lg-8" style="text-align: left;">
+                    <h3 class="myheader">Person Form</h3>
+                </div>
+
+                <div class="ui-sm-4 ui-md-4 ui-lg-4" style="text-align: right;">
+                    <button pButton type="button" tooltipPosition="top" Tooltip="Edit Your Form" (click)="EditClick()" icon="fa-edit" iconPos="right"
+                        class="ui-button-primary" style="width:35px;"></button>
+
+                    <button pButton type="button" tooltipPosition="top" Tooltip="Close" (click)="closePersonForm()" icon="fa fa-window-close"
+                        iconPos="right" class="ui-button-secondary" style="width:35px;"></button>
+                </div>
+
+            </div>
+            <div class="ui-panelgrid ui-widget ui-panelgrid-blank" style="border:0px !important; background:none;">
+                <div class="ui-panelgrid-content ui-grid ui-grid-responsive">
+
+                    <div class="ui-g-12 ui-md-12 ui-lg-6">
+                        <div class="ui-grid-row" *ngIf="defaultPerson.name !== person.name">
+                            <div class="ui-grid-col-5">
+                                Name:
+                            </div>
+                            <div class="ui-grid-col-7">
+                                {{person.name}}
+                            </div>
+                            <br />
+                        </div>
+
+                        <div class="ui-grid-row" *ngIf="defaultPerson.fatherName!== person.fatherName">
+                            <div class="ui-grid-col-5">
+                                Father Name:
+                            </div>
+                            <div class="ui-grid-col-7">
+                                {{person.fatherName}}
+                            </div>
+                            <br />
+                        </div>
+
+                        <div class="ui-grid-row" *ngIf="defaultPerson.motherName!== person.motherName">
+                            <div class="ui-grid-col-5">
+                                Mother Name :
+                            </div>
+                            <div class="ui-grid-col-7">
+                                {{person.motherName}}
+                            </div>
+                            <br />
+                        </div>
+                        <div class="ui-grid-row" *ngIf="defaultPerson.nrc!== person.nrc">
+                            <div class="ui-grid-col-5">
+                                NRC:
+                            </div>
+                            <div class="ui-grid-col-7">
+                                {{person.nrc}}
+                            </div>
+                            <br />
+                        </div>
+                        <div class="ui-grid-row" *ngIf="defaultPerson.dateOfBirth!== person.dateOfBirth">
+                            <div class="ui-grid-col-5">
+                                Date of Bitrh :
+                            </div>
+                            <div class="ui-grid-col-7">
+                                {{person.dateOfBirth | date:'shortDate'}}
+                            </div>
+                            <br />
+                        </div>
+
+                        <div class="ui-grid-row" *ngIf="defaultPerson.race!== person.race">
+                            <div class="ui-grid-col-5">
+                                Race :
+                            </div>
+                            <div class="ui-grid-col-7">
+                                {{person.race}}
+                            </div>
+                            <br />
+                        </div>
+
+                        <div class="ui-grid-row" *ngIf="defaultPerson.nationality!== person.nationality">
+                            <div class="ui-grid-col-5">
+                                Nationality :
+                            </div>
+                            <div class="ui-grid-col-7">
+                                {{person.nationality}}
+                            </div>
+                            <br />
+                        </div>
+                        <div class="ui-grid-row" *ngIf="defaultPerson.religion!== person.religion">
+                            <div class="ui-grid-col-5">
+                                Religion:
+                            </div>
+                            <div class="ui-grid-col-7">
+                                {{person.religion}}
+                            </div>
+                            <br />
+                        </div>
+                        <div class="ui-grid-row" *ngIf="defaultPerson.gender!== person.gender">
+                            <div class="ui-grid-col-5">
+                                Gender:
+                            </div>
+                            <div class="ui-grid-col-7">
+                                {{person.gender ==0 ? 'Female':'Male'}}
+                            </div>
+                            <br />
+                        </div>
+                        <div class="ui-grid-row" *ngIf="defaultPerson.homeAddress!== person.homeAddress">
+                            <div class="ui-grid-col-5">
+                                Home Address:
+                            </div>
+                            <div class="ui-grid-col-7">
+                                {{person.homeAddress}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui-g-12 ui-md-12 ui-lg-6">
+
+                        <div class="ui-grid-row" *ngIf="defaultPerson.homeCity!== person.homeCity">
+                            <div class="ui-grid-col-5">
+                                Home City :
+                            </div>
+                            <div class="ui-grid-col-7">
+
+                                {{person.homeCity.name}}
+                            </div>
+                            <br />
+                        </div>
+
+                        <div class="ui-grid-row" *ngIf="defaultPerson.homeTownship!== person.homeTownship">
+                            <div class="ui-grid-col-5">
+                                Home Township :
+                            </div>
+                            <div class="ui-grid-col-7">
+                                {{person.homeTownship.name}}
+                            </div>
+                            <br />
+                        </div>
+
+                        <div class="ui-grid-row" *ngIf="defaultPerson.mobilePhone!== person.mobilePhone">
+                            <div class="ui-grid-col-5">
+                                Mobile Phone :
+                            </div>
+                            <div class="ui-grid-col-7">
+                                {{person.mobilePhone}}
+                            </div>
+                            <br />
+                        </div>
+                        <div class="ui-grid-row" *ngIf="defaultPerson.phone!== person.phone">
+                            <div class="ui-grid-col-5">
+                                Phone:
+                            </div>
+                            <div class="ui-grid-col-7">
+                                {{person.phone}}
+                            </div>
+                            <br />
+                        </div>
+                        <div class="ui-grid-row" *ngIf="defaultPerson.email!== person.email">
+                            <div class="ui-grid-col-5">
+                                Email
+                            </div>
+                            <div class="ui-grid-col-7">
+
+                                {{person.email}}
+                            </div>
+                            <br />
+                        </div>
+
+                        <div class="ui-grid-row" *ngIf="defaultPerson.education!== person.education">
+                            <div class="ui-grid-col-5">
+                                Education :
+                            </div>
+                            <div class="ui-grid-col-7">
+                                {{person.education}}
+                            </div>
+                            <br />
+                        </div>
+
+                        <div class="ui-grid-row" *ngIf="defaultPerson.professional!== person.professional">
+                            <div class="ui-grid-col-5">
+                                Professional :
+                            </div>
+                            <div class="ui-grid-col-7">
+                                {{person.professional}}
+                            </div>
+                            <br />
+                        </div>
+                        <div class="ui-grid-row" *ngIf="defaultPerson.biography!== person.biography">
+                            <div class="ui-grid-col-5">
+                                Biography:
+                            </div>
+                            <div class="ui-grid-col-7">
+                                {{person.biography}}
+                            </div>
+                            <br />
+                        </div>
+                        <div class="ui-grid-row" *ngIf="defaultPerson.nativeCity!== person.nativeCity">
+                            <div class="ui-grid-col-5">
+                                Native City :
+                            </div>
+                            <div class="ui-grid-col-7">
+                                {{person.nativeCity.name}}
+                            </div>
+                            <br />
+                        </div>
+                        <div class="ui-grid-row" *ngIf="defaultPerson.remark!== person.remark">
+                            <div class="ui-grid-col-5">
+                                Remark:
+                            </div>
+                            <div class="ui-grid-col-7">
+                                {{person.remark}}
+                            </div>
+                        </div>
+
+                        <div class="ui-grid-row" *ngIf="defaultPerson.photo !== person.photo">
+                            <div class="ui-grid-col-5">
+                                Photo
+                            </div>
+                            <div class="ui-grid-col-7">
+                                <img [src]="person.photo" style="width: 200px; height: 200px; background-color: grey;" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <bs-modal #homeCityModal [size]="'sm'" >
+            <bs-modal-body>
+                <city-entry *ngIf="this.city !== undefined" [cityInput]="this.city" [cityEmitDialog]="true" (cityOutput)="homeCityDialogResult($event)"></city-entry>
+            </bs-modal-body>
+        </bs-modal>
+
+        <bs-modal #homeTownshipModal [size]="'sm'">
+            <bs-modal-body>
+                <township-entry *ngIf="this.town !== undefined" [townshipInput]="this.town" [townshipEmitDialog]="true" (townshipOutput)="townshipDialogResult($event)"></township-entry>
+            </bs-modal-body>
+        </bs-modal>
+
+        <bs-modal #NativeCityModal [size]="'sm'">
+            <bs-modal-body>
+                <city-entry *ngIf="this.native !== undefined" [cityInput]="this.native" [cityEmitDialog]="true" (cityOutput)="nativeCityDialogResult($event)"></city-entry>
+            </bs-modal-body>
+        </bs-modal>
+
+    </div>
+</div>
